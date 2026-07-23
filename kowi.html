@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Want a Date?</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#9e7bb5,#7b679a,#fff0f5);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.card{
+    width:90%;
+    max-width:500px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(12px);
+    padding:35px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+h1{
+    margin-bottom:15px;
+}
+
+p{
+    margin-bottom:20px;
+}
+
+button{
+    background:white;
+    color:#392a48;
+    border:none;
+    padding:14px 28px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:.3s;
+    margin:10px;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.question{
+    display:none;
+}
+
+.answers button{
+    display:block;
+    width:100%;
+}
+
+.progress{
+    width:100%;
+    height:15px;
+    background:#ffffff44;
+    border-radius:20px;
+    overflow:hidden;
+    margin:20px 0;
+}
+
+.bar{
+    width:0%;
+    height:100%;
+    background:white;
+    transition:.25s;
+}
+
+.loading{
+    display:none;
+}
+
+.result{
+    display:none;
+}
+
+img{
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+#noBtn{
+    position:relative;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<div id="home">
+<h1>❤️ Perfect Match Finder ❤️</h1>
+<p>Answer a few questions and discover your soulmate.</p>
+<button onclick="startQuiz()">Start</button>
+</div>
+
+<div id="quiz" class="question">
+<h2 id="questionText"></h2>
+
+<div class="answers" id="answers"></div>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+</div>
+
+<div id="loading" class="loading">
+
+<h2>Finding your soulmate...</h2>
+
+<div class="progress">
+<div class="bar" id="loadingBar"></div>
+</div>
+
+<p id="loadingText">Scanning profiles...</p>
+
+</div>
+
+<div id="result" class="result">
+
+<h1>🎉 Match Found! 🎉</h1>
+
+<img src="ako.jpg" alt="My Photo">
+
+<h2>Compatibility: 99.9999%</h2>
+
+<p>
+After checking over <b>13,482</b> profiles...
+</p>
+
+<h1>❤️ It's Me ❤️</h1>
+
+<p>
+Looks like we're a perfect match!
+</p>
+
+<button onclick="alert('Yay! ❤️')">YES ❤️</button>
+
+<button id="noBtn">No 😅</button>
+
+</div>
+
+</div>
+
+<script>
+
+const questions=[
+{
+q:"What's your favorite drink?",
+a:["Coffee","Tea","Juice","Water"]
+},
+{
+q:"Choose one",
+a:["Cats","Dogs","Both","Neither"]
+},
+{
+q:"Favorite time?",
+a:["Morning","Afternoon","Night"]
+},
+{
+q:"Ideal date?",
+a:["Movies","Beach","Cafe","Adventure"]
+}
+];
+
+let current=0;
+
+function startQuiz(){
+document.getElementById("home").style.display="none";
+document.getElementById("quiz").style.display="block";
+showQuestion();
+}
+
+function showQuestion(){
+
+const q=questions[current];
+
+document.getElementById("questionText").innerText=q.q;
+
+const answers=document.getElementById("answers");
+
+answers.innerHTML="";
+
+q.a.forEach(answer=>{
+
+const btn=document.createElement("button");
+
+btn.innerText=answer;
+
+btn.onclick=next;
+
+answers.appendChild(btn);
+
+});
+
+document.getElementById("bar").style.width=((current)/questions.length*100)+"%";
+
+}
+
+function next(){
+
+current++;
+
+if(current>=questions.length){
+
+document.getElementById("quiz").style.display="none";
+
+loading();
+
+return;
+
+}
+
+showQuestion();
+
+}
+
+function loading(){
+
+document.getElementById("loading").style.display="block";
+
+const texts=[
+"Analyzing personality...",
+"Checking compatibility...",
+"Scanning 13,482 profiles...",
+"Finding soulmate...",
+"Almost done..."
+];
+
+let i=0;
+
+let progress=0;
+
+const bar=document.getElementById("loadingBar");
+
+const text=document.getElementById("loadingText");
+
+const interval=setInterval(()=>{
+
+progress+=2;
+
+bar.style.width=progress+"%";
+
+if(progress%20===0 && i<texts.length){
+
+text.innerText=texts[i];
+
+i++;
+
+}
+
+if(progress>=100){
+
+clearInterval(interval);
+
+document.getElementById("loading").style.display="none";
+
+document.getElementById("result").style.display="block";
+
+}
+
+},60);
+
+}
+
+const no=document.getElementById("noBtn");
+
+no.addEventListener("mouseover",()=>{
+
+const x=Math.random()*250-125;
+
+const y=Math.random()*180-90;
+
+no.style.transform=`translate(${x}px,${y}px)`;
+
+});
+
+</script>
+
+</body>
+</html>
